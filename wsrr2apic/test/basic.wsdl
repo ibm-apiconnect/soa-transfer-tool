@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://ibm.com/sr/test/wsdl/basic.wsdl" xmlns:impl="http://ibm.com/sr/test/wsdl/basic.schema" xmlns:intf="http://ibm.com/sr/test/wsdl/basic.wsdl" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsi="http://ws-i.org/profiles/basic/1.1/xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+ <wsdl:types>
+  <schema targetNamespace="http://ibm.com/sr/test/wsdl/basic.schema" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <element name="basicRequest">
+    <complexType>
+     <sequence>
+      <element name="request" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="basicResponse">
+    <complexType>
+     <sequence>
+      <element name="response" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+  </schema>
+ </wsdl:types>
+
+   <wsdl:message name="basicRequest">
+
+      <wsdl:part element="impl:basicRequest" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="basicResponse">
+
+      <wsdl:part element="impl:basicResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:portType name="basicServices">
+
+      <wsdl:operation name="basicMessage">
+
+         <wsdl:input message="intf:basicRequest" name="basicRequest"/>
+
+         <wsdl:output message="intf:basicResponse" name="basicResponse"/>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="basicSoapBinding" type="intf:basicServices">
+
+      <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="basicMessage">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="basicRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="basicResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="basicService">
+
+      <wsdl:port binding="intf:basicSoapBinding" name="basic">
+
+         <wsdlsoap:address location="https://srb84a.hursley.ibm.com:9443/Basic/basicService"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>

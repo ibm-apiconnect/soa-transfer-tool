@@ -1,0 +1,5 @@
+/node_modules/**
+/flowTestOutput/**
+.tern-project
+/flowTestOutput2/
+/wsdlTestOutput/

@@ -1,0 +1,85 @@
+
+info:
+  description: >
+    #### Echos back every URL, method, parameter and header
+
+    Feel free to make a path or an operation and use **Try Operation** to test
+    it. The echo server will
+
+    render back everything.
+  version: 1.0.0
+  title: Echo
+basePath: /echo
+schemes:
+  - https
+paths:
+  /:
+    x-swagger-router-controller: echo
+    get:
+      parameters: []
+      responses:
+        '200':
+          description: Echo GET
+    post:
+      parameters:
+        - name: name
+          in: formData
+          description: name
+          required: false
+          type: string
+        - name: year
+          in: formData
+          description: year
+          required: false
+          type: string
+      responses:
+        '200':
+          description: Echo POST
+  '/test-path/{id}':
+    x-swagger-router-controller: echo_test
+    get:
+      parameters:
+        - name: id
+          in: path
+          description: ID
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Echo test-path
+definitions: {}
+x-ibm-configuration:
+  assembly:
+    execute:
+      - operation-switch:
+          case:
+            - execute:
+                - invoke:
+                    tls-profile: ''
+                    target-url: 'https://echoseager.eu-gb.mybluemix.net/echo/'
+              operations:
+                - verb: post
+                  path: /
+      - operation-switch:
+          case:
+            - execute:
+                - invoke:
+                    tls-profile: ''
+                    target-url: 'https://echoseager.eu-gb.mybluemix.net/echo/'
+              operations:
+                - verb: get
+                  path: /
+      - operation-switch:
+          case:
+            - execute:
+                - invoke:
+                    tls-profile: ''
+                    target-url: 'https://echoseager.eu-gb.mybluemix.net/echo/test-path/{id}'
+              operations:
+                - verb: get
+                  path: '/test-path/{id}'
+  testable: true
+  phase: realized
+  enforced: true
+  cors:
+    enabled: true

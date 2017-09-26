@@ -1,0 +1,37 @@
+product: '1.0.0'
+
+info:
+  name: '{{apiName version.properties.name}}'
+  title: '{{version.properties.name}}'
+  version: '{{version.properties.version}}'
+  description: "{{multiline properties.description}}"
+  contact:
+    name: '{{version.properties.owner}}'
+    {{#if version.properties.ale63_ownerEmail}}email: '{{version.properties.ale63_ownerEmail}}'{{/if}}
+    
+apis:
+# The API Name below must match the referenced API in the plans section below
+  '{{apiName version.properties.name}}':
+    $ref: api.yaml
+
+visibility:
+  view:
+    enabled: true
+    type: public
+  subscribe:
+    enabled: true
+    type: authenticated
+
+plans:
+{{#each version.slds}}
+  {{apiName this.properties.name}}:
+    title: '{{this.properties.name}}'
+    description: '{{this.properties.description}}'
+    apis:
+# The API Name below must match the referenced APIs in the apis section above
+      '{{apiName ../version.properties.name}}': {}
+    approval: false
+    rate-limit:
+      value: 100/hour
+      hard-limit: false
+{{/each}}

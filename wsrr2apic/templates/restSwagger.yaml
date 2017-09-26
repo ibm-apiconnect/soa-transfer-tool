@@ -1,0 +1,24 @@
+swagger: '2.0'
+info:
+  description: "{{multiline version.properties.description}}"
+  x-ibm-name: '{{apiName version.properties.name}}'
+  title: '{{version.properties.name}}'
+  version: '{{version.properties.version}}'
+  contact:
+    name: '{{version.properties.owner}}'
+    {{#if version.properties.ale63_ownerEmail}}email: '{{version.properties.ale63_ownerEmail}}'{{/if}}
+host: '$(catalog.host)'
+schemes:
+  - "https"
+x-ibm-configuration:
+  phase: "realized"
+  assembly:
+    execute:
+      -
+        proxy:
+          title: "proxy"
+          target-url: '{{hostProtocol (endpointNameByClassifications version.slds "http://www.ibm.com/xmlns/prod/serviceregistry/6/1/GovernanceProfileTaxonomy#Production")}}$(request.path)' 
+  testable: true
+  enforced: true
+  cors:
+    enabled: true

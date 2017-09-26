@@ -1,0 +1,9 @@
+swagger: '2.0'
+info:
+  description: "{{multiline version.properties.description}}"
+  x-ibm-name: '{{apiName version.properties.name}}'
+  title: '{{version.properties.name}}'
+  version: '{{version.properties.version}}'
+  contact:
+    name: '{{version.properties.owner}}'
+    email: '{{version.properties.ale63_ownerEmail}}'

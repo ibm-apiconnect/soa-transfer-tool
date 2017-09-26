@@ -1,0 +1,32 @@
+
+var path = require("path");
+
+/**
+ * GET /WSRR/7.5/Metadata/JSON/8ec5198e-bedb-4be4.ae55.ba951cba5574
+ *
+ * accept: application/json
+ * host: srb84a.hursley.ibm.com:9443
+ * authorization: Basic dXNlcjp1c2Vy
+ * connection: close
+ */
+
+module.exports = function (req, res) {
+  res.statusCode = 200;
+
+  res.setHeader("x-powered-by", "Servlet/3.0");
+  res.setHeader("content-type", "application/json");
+  res.setHeader("content-length", "1535");
+  res.setHeader("expires", "-1");
+  res.setHeader("content-language", "en-US");
+  res.setHeader("set-cookie", ["LtpaToken2=L1c93N/AFTGmi3544K81Lb/lovqNQArlytnyQYkMVUF3jo41smSxGK+W8m5acmCdEkgrW5XBZ18YMHoAEezGqpJI3rotMpydT9xWVCYU5BuW0Dxi3r62ZqR6Se0Qy/tl8+lhHRWIaC6qnmblAFMRUWylXhv/dsXoHy3m2pbeAKM11DufQ+CirjD/QC/9V3rzwe/eYWuxVk9gFziUc98m//5jF1/iqbL80lbLUyxRq3Dn5bAaf1bzfWVdWsWdI1pe3jtsBOYmbi2/XJIXjfVFe/0pNaATZdfaVgmuGht8n8lQZEoAeBCN8mRLimuP9gzfWol8XFRgHl7ynj3yfys3UYr4YznzML4zJypBp4bi4P/5f4BgQSCpKRsjZVJUS3dkuLyysJ+RWLAEubqJzrzhAk4MNaAesayCg34O3SlLwJotPMPEm7FMMCoGd6S4Th9WM9yZQJ3be1yFey96zjXM8yzp+Xek4CX3DzWAF8fd40u310gzVRXbFirEBsqH7l6E4qgbD++/7bXmG50xDVsysomrSLxyaVAw2L/WgcEPnSsKGWDkvNTw4ns7Ux7PQy86VZme0POArNF7Y/pro25JiftLJv001a5YzTEvGmpTmvV4nrS6yzs1Wi8Ejz+bzYXKB2GhD+o3VMrYVkza2JVUW+YIC4CqrH/veIx82jSa++rJVzhidd1VoiKVsurIK8uU; Path=/; Secure; HttpOnly"]);
+  res.setHeader("connection", "Close");
+  res.setHeader("date", "Mon, 01 Aug 2016 08:43:48 GMT");
+  res.setHeader("cache-control", "no-cache=\"set-cookie, set-cookie2\"");
+
+  res.setHeader("x-yakbak-tape", path.basename(__filename, ".js"));
+
+  res.write(new Buffer("W3sicHJvcGVydGllcyI6W3sidmFsdWUiOiI4ZWM1MTk4ZS1iZWRiLTRiZTQuYWU1NS5iYTk1MWNiYTU1NzQiLCJuYW1lIjoiYnNyVVJJIn0seyJ2YWx1ZSI6Ik1hdGhTZXJ2ZXJCaW5kaW5nLndzZGwiLCJuYW1lIjoibmFtZSJ9LHsidmFsdWUiOiJodHRwOlwvXC9tYXRoLnBvdC5pYm0uY29tIiwibmFtZSI6Im5hbWVzcGFjZSJ9LHsidmFsdWUiOiIxLjAiLCJuYW1lIjoidmVyc2lvbiJ9LHsidmFsdWUiOiIiLCJuYW1lIjoiZGVzY3JpcHRpb24ifSx7InZhbHVlIjoid2FzYWRtaW4iLCJuYW1lIjoib3duZXIifSx7InZhbHVlIjoiMTQ2NDcwMDk4NTgwOCIsIm5hbWUiOiJsYXN0TW9kaWZpZWQifSx7InZhbHVlIjoiMTQ2NDcwMDk4NTgwOCIsIm5hbWUiOiJjcmVhdGlvblRpbWVzdGFtcCJ9LHsidmFsdWUiOiJ3YXNhZG1pbiIsIm5hbWUiOiJsYXN0TW9kaWZpZWRCeSJ9LHsidmFsdWUiOiJVVEYtOCIsIm5hbWUiOiJlbmNvZGluZyJ9LHsidmFsdWUiOiJNYXRoU2VydmVyQmluZGluZy53c2RsIiwibmFtZSI6ImxvY2F0aW9uIn0seyJ2YWx1ZSI6IjI0MzciLCJuYW1lIjoiY29udGVudFNpemUifSx7InZhbHVlIjoiaHR0cDpcL1wvd3d3LnczLm9yZ1wvMjAwMVwvWE1MU2NoZW1hIiwibmFtZSI6InhtbG5zX3hzZCJ9LHsidmFsdWUiOiJodHRwOlwvXC93cy1pLm9yZ1wvcHJvZmlsZXNcL2Jhc2ljXC8xLjFcL3hzZCIsIm5hbWUiOiJ4bWxuc193c2kifSx7InZhbHVlIjoiaHR0cDpcL1wvc2NoZW1hcy54bWxzb2FwLm9yZ1wvd3NkbFwvc29hcFwvIiwibmFtZSI6InhtbG5zX3dzZGxzb2FwIn0seyJ2YWx1ZSI6Imh0dHA6XC9cL3d3dy53My5vcmdcLzIwMDZcLzA1XC9hZGRyZXNzaW5nXC93c2RsIiwibmFtZSI6InhtbG5zX3dzYXcifSx7InZhbHVlIjoiaHR0cDpcL1wvbWF0aC5wb3QuaWJtLmNvbSIsIm5hbWUiOiJ4bWxuc190bnMifSx7InZhbHVlIjoiaHR0cDpcL1wvbWF0aC5wb3QuaWJtLmNvbSIsIm5hbWUiOiJ4bWxuc19pbnRmIn0seyJ2YWx1ZSI6Imh0dHA6XC9cL3NjaGVtYXMueG1sc29hcC5vcmdcL3dzZGxcLyIsIm5hbWUiOiJ4bWxucyJ9XSwic3Vic2NyaWJlZFRyYW5zaXRpb25zIjpbXSwic3Vic2NyaWJlZE9wZXJhdGlvbnMiOltdLCJ0eXBlIjoiV1NETERvY3VtZW50IiwicmVsYXRpb25zaGlwcyI6W3sidGFyZ2V0VHlwZSI6IldTRExEb2N1bWVudCIsIm5hbWUiOiJpbXBvcnRlZFdTRExzIiwidGFyZ2V0QnNyVVJJIjoiOTdiMjgxOTctMTdiNy00NzkwLjg3ZjAuNDg4ZjVhNDhmMDUzIn1dLCJic3JVUkkiOiI4ZWM1MTk4ZS1iZWRiLTRiZTQuYWU1NS5iYTk1MWNiYTU1NzQiLCJ0YXJnZXRDbGFzc2lmaWNhdGlvbnMiOltdLCJjbGFzc2lmaWNhdGlvbnMiOlt7InVyaSI6Imh0dHA6XC9cL3d3dy5pYm0uY29tXC94bWxuc1wvcHJvZFwvc2VydmljZXJlZ2lzdHJ5XC9saWZlY3ljbGVcL3Y2cjNcL0xpZmVjeWNsZURlZmluaXRpb24jT25saW5lIiwiZ292ZXJuYW5jZVN0YXRlIjoidHJ1ZSJ9XSwiZ292ZXJuYW5jZVJvb3RCc3JVUkkiOiJmYjUyYWZmYi1hZGIxLTQxY2IuYTY4Yi4wYWVhYjEwYThiYmIifV0=", "base64"));
+  res.end();
+
+  return __filename;
+};

@@ -1,0 +1,32 @@
+product: '1.0.0'
+
+info:
+  name: '{{apiName properties.name}}'
+  title: '{{properties.name}}'
+  version: '{{version.properties.version}}'
+  description: "{{multiline properties.description}}"
+
+apis:{{#each versions}}
+  '{{apiName this.properties.name}}_{{apiName this.properties.version}}':
+    $ref: {{this.bsrURI}}/api.yaml
+{{/each}}
+visibility:
+  view:
+    enabled: true
+    type: public
+  subscribe:
+    enabled: true
+    type: authenticated
+
+plans:
+{{#each versions}}{{#each this.slds}}
+  {{apiName this.properties.name}}_{{apiName this.properties.version}}:
+    title: '{{this.properties.name}}'
+    description: '{{this.properties.description}}'
+    apis:
+      '{{apiName ../properties.name}}': {}
+    approval: false
+    rate-limit:
+      value: 100/hour
+      hard-limit: false
+{{/each}}{{/each}}

@@ -1,0 +1,40 @@
+extension: "1.0.0"
+info:
+  name: "WSRRConsumers"
+  title: "WSRR Consumers"
+  version: "1"
+Gateway-visible: false
+portal-visible: false
+properties:
+  type: "array"
+  items:
+    type: "object"
+    properties:
+      Consumer:
+        type: "object"
+        properties:
+          capabilityName:
+            type: "string"
+          capabilityDescription:
+            type: "string"
+          versionName:
+            type: "string"
+          versionDescription:
+            type: "string"
+          versionVersion:
+            type: "string"
+          slaName:
+            type: "string"
+          sldName:
+            type: "string"
+        required:
+        - "capabilityName"
+        - "capabilityDescription"
+        - "versionName"
+        - "versionDescription"
+        - "versionVersion"
+        - "slaName"
+        - "sldName"
+
+gateways:
+- "datapower-gateway"

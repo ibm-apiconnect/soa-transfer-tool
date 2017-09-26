@@ -1,0 +1,90 @@
+x-wsrr-metadata:
+  BS-bsrURI: {{bsrURI}}
+{{#each properties}}
+  BS-{{@key}}: '{{this}}'
+{{/each}}
+  BS-state: '{{state}}'
+  SV-bsrURI: {{version.bsrURI}}
+{{#each version.properties}}
+  SV-{{@key}}: '{{this}}'
+{{/each}}
+  SV-state: '{{version.state}}'
+{{#if version.classifications}}  
+  SV-classifications:
+{{#each version.classifications}}
+  - '{{this}}'
+{{/each}}{{else}}
+  SV-classifications: []
+{{/if}}
+  SLDs:
+{{#each version.slds}}
+    - state: '{{this.state}}'
+      bsrURI: '{{this.bsrURI}}'{{#each this.properties}}
+      {{@key}}: '{{this}}'{{/each}}
+      {{#if this.classifications}}classifications:{{#each this.classifications}}
+        - '{{this}}'{{/each}}{{else}}
+      classifications: []
+      {{/if}}
+      
+      {{#if this.endpoints}}endpoints:{{#each this.endpoints}}
+        - url: '{{this.properties.name}}'
+          bsrURI: '{{this.bsrURI}}'
+          state: '{{this.state}}'
+          {{#each this.properties}}
+          {{@key}}: '{{this}}'
+          {{/each}}
+          {{#if this.classifications}}classifications:{{#each this.classifications}}
+            - '{{this}}'{{/each}}{{else}}
+          classifications: []
+          {{/if}}
+      {{/each}}{{/if}}
+
+      {{#if this.consumers}}consumers:{{#each this.consumers}}
+        - sla:
+            state: '{{this.sla.state}}'
+            bsrURI: '{{this.sla.bsrURI}}'
+            {{#each this.sla.properties}}
+            {{@key}}: '{{this}}'
+            {{/each}}
+            {{#if this.sla.classifications}}classifications:{{#each this.sla.classifications}}
+            - '{{this}}'{{/each}}{{else}}
+            classifications: []
+            {{/if}}
+                        
+          version:
+            state: '{{this.version.state}}'
+            bsrURI: '{{this.version.bsrURI}}'{{#each this.version.properties}}
+            {{@key}}: '{{this}}'{{/each}}
+            {{#if this.version.classifications}}classifications:{{#each this.version.classifications}}
+            - '{{this}}'{{/each}}{{else}}
+            classifications: []
+            {{/if}}
+            
+          capability:
+            state: '{{this.capability.state}}'
+            bsrURI: '{{this.capability.bsrURI}}'{{#each this.capability.properties}}
+            {{@key}}: '{{this}}'{{/each}}
+            {{#if this.capability.classifications}}classifications:{{#each this.capability.classifications}}
+            - '{{this}}'{{/each}}{{else}}
+            classifications: []
+            {{/if}}
+        
+      {{/each}}{{else}}
+      consumers: []
+      {{/if}}
+
+{{/each}}
+
+x-WSRRConsumers:
+{{#if this.consumers}}{{#each this.version.slds}}{{#if this.consumers}}{{#each this.consumers}}
+  - Consumer:
+      capabilityName: '{{this.capability.properties.name}}'
+      capabilityDescription: '{{this.capability.properties.description}}'
+      versionName: '{{this.version.properties.name}}'
+      versionDescription: '{{this.version.properties.description}}'
+      versionVersion: '{{this.version.properties.version}}'
+      slaName: '{{this.sla.properties.name}}'
+      sldName: '{{../properties.name}}'
+{{/each}}{{/if}}{{/each}}{{else}}
+      []
+{{/if}}

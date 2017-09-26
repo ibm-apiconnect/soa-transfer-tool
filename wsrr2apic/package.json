@@ -1,0 +1,83 @@
+{
+  "name": "apiconnect-soa-transfer-tool",
+  "version": "1.0.0",
+  "description": "IBM Service Oriented Architecture Transfer Tool",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha --reporter spec --grep unittests",
+    "ciTests": "./node_modules/.bin/mocha --reporter spec --grep \"unittests|fsfvttests|wsrrfvttests\"",
+    "wsrrfvt": "./node_modules/.bin/mocha --reporter spec --grep wsrrfvttests",
+    "fsfvt": "./node_modules/.bin/mocha --reporter spec --grep fsfvttests",
+    "apicfvt": "./node_modules/.bin/mocha --reporter spec --grep apimfvttests",
+    "apicdpfvt": "./node_modules/.bin/mocha --reporter spec --grep apimdevportal_fvttests",
+    "e2efvt": "./node_modules/.bin/mocha --reporter spec --grep e2e_fvt",
+    "allfvt": "./node_modules/.bin/mocha --reporter spec --grep fvttests"
+  },
+  "author": "IBM Corp (http://www.ibm.com)",
+  "contributors": [
+    "Alex Butcher",
+    "David Seager"
+  ],
+  "license": "Apache-2.0",
+  "bin": {
+    "soatt": "./index.js"
+  },
+  "engines": {
+    "node": ">= 4.4.0",
+    "npm": ">=3"
+  },
+  "main": "./lib/main.js",
+  "preferGlobal": true,
+  "files": [
+    "index.js",
+    "connectionproperties.properties",
+    "lib",
+    "resourcebundle",
+    "templates",
+    "LICENSE.txt",
+    "README.md",
+    "DETAILS.md",
+    "npm-shrinkwrap.json",
+    "samples",
+    "plugins"
+  ],
+  "keywords": [
+    "WSRR"
+  ],
+  "dependencies": {
+    "adm-zip": "0.4.4",
+    "bluebird": "3.0.6",
+    "bunyan": "1.5.1",
+    "cldr-data": "29.0.1",
+    "command-line-args": "2.1.6",
+    "chardet": "0.1.0",
+    "encoding": "0.1.12",
+    "globalize": "1.0.0",
+    "handlebars": "4.0.5",
+    "js-yaml": "3.5.5",
+    "lodash": "4.9.0",
+    "logrotate-stream": "0.2.5",
+    "mkdirp": "0.5.1",
+    "os-homedir": "1.0.1",
+    "prompt": "1.0.0",
+    "properties-parser": "0.3.0",
+    "retry": "0.10.0",
+    "strftime": "0.9.2",
+    "xmldoc": "0.3.2",
+    "xmldom": "0.1.22"
+  },
+  "devDependencies": {
+    "chai": "^3.0.0",
+    "fs-extra": "^1.0.0",
+    "grunt": "^1.0.1",
+    "grunt-banner": "^0.6.0",
+    "grunt-markdown": "^0.7.0",
+    "markdown-to-html": "0.0.11",
+    "mocha": "^2.2.5",
+    "nlf": "^1.4.1",
+    "yakbak": "2.5.0"
+  },
+  "repository": {
+	  "type": "git",
+	  "url": "https://github.com/ibm-apiconnect/soa-transfer-tool.git"
+  }
+}

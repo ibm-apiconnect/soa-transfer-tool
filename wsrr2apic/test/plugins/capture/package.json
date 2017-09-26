@@ -1,0 +1,6 @@
+{
+  "name": "capture",
+  "version": "1.0.0",
+  "description": "Test module for plugin",
+  "main": "./index.js"
+}

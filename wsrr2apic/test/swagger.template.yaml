@@ -1,0 +1,78 @@
+swagger: '2.0'
+info:
+  description: {{versions.0.properties.description}}
+  x-ibm-name: {{versions.0.properties.name}}
+  title: {{versions.0.properties.name}}
+  version: '{{versions.0.properties.version}}'
+schemes:
+  - https
+host: {{host versions.0.slds.0.endpoints.0.properties.name}}
+basePath: {{path versions.0.slds.0.endpoints.0.properties.name}}
+consumes:
+  - application/json
+produces:
+  - application/json
+tags:
+securityDefinitions:
+  clientIdHeader:
+    type: apiKey
+    in: header
+    name: X-IBM-Client-Id
+security:
+  - clientIdHeader: []
+x-ibm-configuration:
+  phase: identified
+  assembly:
+    execute:
+      - invoke:
+          title: proxy
+          target-url: {{versions.0.slds.0.endpoints.0.properties.name}} 
+  testable: true
+  enforced: true
+  cors:
+    enabled: true
+paths:
+  /:
+    get:
+      summary: Default get on the root path
+      description: Default get on the root path
+      operationId: get
+      responses:
+        '200':
+          description: Success
+        default:
+          description: Unexpected error
+x-wsrrmetadata:
+  CV-bsrURI: {{bsrURI}}
+  CV-name: {{properties.name}}
+  CV-description: {{properties.description}}
+  SV-bsrURI: {{versions.0.bsrURI}}
+  SV-name: {{versions.0.properties.name}}
+  SV-namespace: {{versions.0.properties.namespace}}
+  SV-version: {{versions.0.properties.version}}
+  SV-description: {{versions.0.properties.description}}
+  SV-owner: {{versions.0.properties.owner}}
+  SV-lastModified: {{versions.0.properties.lastModified}}
+  SV-creationTimestamp: {{versions.0.properties.creationTimeStamp}}
+  SV-lastModifiedBy: {{versions.0.properties.lastModifiedBy}}
+  SV-primaryType: {{versions.0.properties.primaryType}}
+  SV-state: {{versions.0.state}}
+  SV-ale63_ownerEmail: {{versions.0.properties.ale63_ownerEmail}}
+  SV-classifications: 
+{{#each versions.0.classifications}}
+  - '{{this}}'
+{{/each}}
+  SLDs:
+{{#each versions.0.slds}}  
+    - name: '{{this.properties.name}}'
+    - state: '{{this.state}}'
+      endpoints:{{debug endpoints}}{{#each endpoints}}
+        - url: '{{this.properties.name}}'
+          bsrURI: '{{this.bsrURI}}'
+          classifications:{{#each classifications}}
+            - '{{this}}'{{/each}}
+{{/each}}{{/each}}
+{{#each versions.0.properties}}
+  SV-{{@key}}: {{this}}
+{{/each}}
+ 

@@ -1,0 +1,15 @@
+consumersDetails: '1.0.0'
+
+consumers: 
+{{#if this.consumers}}{{#each this.version.slds}}{{#if this.consumers}}
+{{#each this.consumers}}
+  - name: '{{this.version.properties.name}} ({{this.version.bsrURI}})'
+    description: "{{multiline this.version.properties.description}}"
+    clientID: '{{this.version.properties.gep63_consumerIdentifier}}'
+    duplicateClientID: '{{this.version.properties.gep63_consumerIdentifier}}{{this.sla.properties.gep63_contextIdentifier}}'
+# the plan name must generate the same as the plan name in the product template    
+    planName: '{{apiName ../properties.name}}'
+  
+{{/each}}{{/if}}{{/each}}{{else}}
+  []
+{{/if}}

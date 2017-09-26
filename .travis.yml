@@ -1,0 +1,14 @@
+language: node_js
+node_js:
+- 4.2.5
+- 6
+sudo: false
+before_install:
+- if [[ `npm -v` != 3* ]]; then npm i -g npm@3; fi
+- npm --version
+script:
+- cd wsrr2apic && npm install && npm run-script ciTests && node index.js
+after_script:
+- ls -l /home/travis
+- ls -l /home/travis/.wsrr2apic
+- ls -l /home/travis/.wsrr2apic/logs

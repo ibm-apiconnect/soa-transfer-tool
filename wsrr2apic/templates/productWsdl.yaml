@@ -1,0 +1,32 @@
+product: '1.0.0'
+
+info:
+  name: '{{apiName info.title}}'
+  title: '{{info.title}}'
+  version: '{{info.version}}'
+  description: "{{multiline info.description}}"
+  contact:
+    name: '{{info.contact.name}}'
+    
+apis:
+  '{{info.x-ibm-name}}':
+    $ref: api.yaml
+
+visibility:
+  view:
+    enabled: true
+    type: public
+  subscribe:
+    enabled: true
+    type: authenticated
+
+plans:
+  {{info.x-ibm-name}}:
+    title: 'default'
+    description: ''
+    apis:
+      '{{info.x-ibm-name}}': {}
+    approval: false
+    rate-limit:
+      value: 100/hour
+      hard-limit: false
