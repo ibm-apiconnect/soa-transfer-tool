@@ -22,7 +22,7 @@ $ npm install -g apiconnect-soa-transfer-tool
 
 Prerequisites:
 - Node.js version 4.x.
-- The API Connect toolkit must be at level 5.0.7.0 or a higher fix pack of API Connect 5.0.
+- The API Connect toolkit must be at level 5.0.8.0 or a higher fix pack of API Connect 5.0.
 
 
 ## Usage 
