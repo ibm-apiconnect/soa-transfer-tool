@@ -1,6 +1,6 @@
 # apiconnect-soa-transfer-tool
 
-IBM Service Oriented Architecture Transfer Tool. 
+IBM Service Oriented Architecture Transfer Tool.
 
 
 ## Features
@@ -36,7 +36,7 @@ $ soatt
 
 ## Documentation
 
-See [DETAILS.md](DETAILS.md) for full details of the tool.
+See [DETAILS.md](https://github.com/ibm-apiconnect/soa-transfer-tool/blob/master/wsrr2apic/DETAILS.md) for full details of the tool.
 
 
 ## License
