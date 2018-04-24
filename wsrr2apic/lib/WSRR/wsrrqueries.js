@@ -18,17 +18,17 @@ var propertyQuery="PropertyQuery?query=";
 var graphQuery="GraphQuery?query=";
 
 var AllServiceVersions ={
-		path: "WSRR/7.5/Metadata/XML/",		
+		path: "WSRR/7.5/Metadata/XML/",
 		query: "/WSRR/GenericObject[@primaryType=%22http://www.ibm.com/xmlns/prod/serviceregistry/profile/v6r3/GovernanceEnablementModel%23ServiceVersion%22]\&p1=name\&p2=version\&p3=bsrURI"
 };
 
 var AllApplicationVersions = {
-		path: "WSRR/7.5/Metadata/XML/",		
+		path: "WSRR/7.5/Metadata/XML/",
 		query: "/WSRR/GenericObject[@primaryType=%22http://www.ibm.com/xmlns/prod/serviceregistry/profile/v6r3/GovernanceEnablementModel%23ApplicationVersion%22]\&p1=name\&p2=version\&p3=bsrURI"
 };
 
 var EndpointAddressGivenBsrURI = {
-		path: "WSRR/7.5/Metadata/XML/",		
+		path: "WSRR/7.5/Metadata/XML/",
 		query: "/WSRR/GenericObject[@bsrURI=%22%bsrURI%%22]/gep63_provides()/gep63_availableEndpoints()&p1=name"
 };
 
@@ -147,12 +147,15 @@ var OwningOrganizationForEntity = {
 		configOverrideName: "OwningOrganizationForEntity"
 };
 
+var SimplePropertyQuery={
+		query: "/WSRR/GenericObject[@bsrURI='%s']"
+};
 
 // for SOAP wsdl on SLD, we already have the SOAP Service Endpoint so we just use the sm63_sourceDocument(.) relationship to get the WSDL to start from
 
 /*
  * Get the xpath string for the query, taking an override from the config if there.
- * 
+ *
  * queryObject - the object in this module, such as WSDLForServiceVersion
  * configProperties - the config object
  */
@@ -167,7 +170,7 @@ function getQueryXPath(queryObject, configProperties) {
 			 ret = xpath;
 		}
 	}
-	
+
 	logger.exit("getQueryXPath", ret);
 	return ret;
 }
@@ -185,7 +188,7 @@ function resolveInserts() {
 	if(insertHits) {
 		count = insertHits.length;
 	}
-	//if there is more than one insert and 
+	//if there is more than one insert and
 	if (count > 0 && len > 1) {
 		// pass in only those params that have inserts (arguments is not an actual array thus below)
 		var params = Array.prototype.slice.call(arguments, 0, count + 1);
@@ -217,7 +220,8 @@ module.exports={
 		ConsumingVersionsForSLASingleSV:ConsumingVersionsForSLASingleSV,
 		OwningCapabilityForVersion:OwningCapabilityForVersion,
 		OwningOrganizationForEntity:OwningOrganizationForEntity,
-				
+		SimplePropertyQuery:SimplePropertyQuery,
+
 		getQueryXPath:getQueryXPath,
 		resolveInserts:resolveInserts
 };
