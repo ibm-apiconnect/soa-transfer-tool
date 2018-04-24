@@ -18,16 +18,16 @@ function endToEndTransfer(options){
 	// Perform test connections User promises to ensure prechecks are complete before starting transfer
 	var bsrURI;
 	if(options.transferMode.length>1){
-		bsrURI=options.transferMode[1];								
+		bsrURI=options.transferMode[1];
 	}
 	var directory;
 	if (options.outputDirectory) {
 		directory = options.outputDirectory;
 	} else {
 		directory = homedir()+ "/.soatt/files";
-	}						
+	}
 	var join = Promise.join(
-		//ensure file output directory exists, if not create it									
+		//ensure file output directory exists, if not create it
 		outputDirectoryCreation = new Promise(
 			function(resolve,reject) {
 				fs.access(directory,fs.F_OK,
@@ -39,7 +39,7 @@ function endToEndTransfer(options){
 						}else{
 							resolve();
 						}
-					});																
+					});
 			}),
 		wsrrtest = new Promise(
 			function(resolve,reject) {
@@ -58,16 +58,16 @@ function endToEndTransfer(options){
 				apicUtils.testAPICConnection(
 						function(passed,error) {
 							if(passed){
-								resolve();														
+								resolve();
 							}else{
 								logger.error(error);
 								logger.error(logger.Globalize.formatMessage("apicconnectiontestfailed"));
 								reject();
-							}													
+							}
 						});
 			}),
 		wsrrOrg = new Promise(
-			function(resolve,reject){	
+			function(resolve,reject){
 				if(!bsrURI){
 					if (!wsrrUtils.getWSRROrg()) {
 						logger.error(logger.Globalize.formatMessage("wsrrNoOrganisationDefined"));
@@ -83,10 +83,10 @@ function endToEndTransfer(options){
 			function(resolve,reject){
 				if(bsrURI){
 					wsrrUtils.validateBsrURI(bsrURI,function(passed){
-						if(passed){																			
+						if(passed){
 							resolve();
 						}else{
-							logger.error(logger.Globalize.formatMessage("invalidbsrURIprovided",bsrURI));									
+							logger.error(logger.Globalize.formatMessage("invalidbsrURIprovided",bsrURI));
 							reject();
 						}
 					});
@@ -94,7 +94,7 @@ function endToEndTransfer(options){
 					resolve();
 				}
 			}),
-		apicdevportaltest = new Promise(function(resolve,reject){										
+		apicdevportaltest = new Promise(function(resolve,reject){
 			apicUtils.createConsumers(function(create){
 				if(create){
 					apicUtils.testPortalConnection(function(passed){
@@ -107,7 +107,7 @@ function endToEndTransfer(options){
 					})
 				}else{
 					resolve();
-				}											
+				}
 			})
 		})
 	).then(
@@ -122,8 +122,8 @@ function endToEndTransfer(options){
 					wsrrUtils.getConnectionProperties(),
 					wsrrUtils,
 					require("./lib/apimcli"),
-					require("./lib/apimdevportal"));									
-			}else{		
+					require("./lib/apimdevportal"));
+			}else{
 				flow.transferToDraftForServiceVersion(
 						bsrURI,
 						directory,
@@ -137,36 +137,36 @@ function endToEndTransfer(options){
 		function(e){
 			//If a error or rejection occurs, check to ensure long running promises complete before exiting the program
 			if(e){
-				logger.error(logger.Globalize.formatMessage("unexpectedprecheckfailure"));
+								logger.error(logger.Globalize.formatMessage("unexpectedprecheckfailure",options.transferMode[0]));
 				logger.error(e);
 			}
 			promiseStatus.checkPromisesStatus([wsrrtest,apictest,apicdevportaltest],function(){
 				logger.error(logger.Globalize.formatMessage("transferModePrecheckFail",options.transferMode[0]));
 				process.exit(1);
 				});
-			});										
+			});
 }
 
 function wsrrDownload(options){
 	var bsrURI;
 	if(options.transferMode.length>1){
-		bsrURI=options.transferMode[1];								
+		bsrURI=options.transferMode[1];
 	}
-	var outputDirectory;							
-	Promise.join(										
+	var outputDirectory;
+	Promise.join(
 		outputDirectoryCreation = new Promise(
 			function(resolve,reject) {
 				if(!options.outputDirectory){
 					logger.error(logger.Globalize.formatMessage("noOutputDirectoryDefined",options.transferMode[0]));
 					reject();
 				}else{
-					outputDirectory=options.outputDirectory;											
+					outputDirectory=options.outputDirectory;
 					fs.access(outputDirectory,fs.F_OK,
 						function(err) {
 							if (err) {
 								mkdirp(outputDirectory,function(){
 									resolve();
-								})							
+								})
 							}else{
 								resolve();
 							}
@@ -181,11 +181,11 @@ function wsrrDownload(options){
 							resolve();
 						}else{
 							reject();
-						}													
+						}
 					});
 			}),
 		wsrrOrg = new Promise(
-			function(resolve,reject){											
+			function(resolve,reject){
 				if(!bsrURI){
 					if (!wsrrUtils.getWSRROrg()) {
 						logger.error(logger.Globalize.formatMessage("wsrrNoOrganisationDefined"));
@@ -201,10 +201,10 @@ function wsrrDownload(options){
 			function(resolve,reject){
 				if(bsrURI){
 					wsrrUtils.validateBsrURI(bsrURI,function(passed){
-						if(passed){																			
+						if(passed){
 							resolve();
 						}else{
-							logger.error(logger.Globalize.formatMessage("invalidbsrURIprovided",bsrURI));									
+							logger.error(logger.Globalize.formatMessage("invalidbsrURIprovided",bsrURI));
 							reject();
 						}
 					});
@@ -216,12 +216,12 @@ function wsrrDownload(options){
 			function(resolve,reject){
 				apicUtils.testAPICToolkit(function(passed,error) {
 					if(passed){
-						resolve();														
+						resolve();
 					}else{
 						logger.error(error);
 						logger.error(logger.Globalize.formatMessage("apicconnectiontestfailed"));
 						reject();
-					}													
+					}
 				});
 			})
 	).then(
@@ -232,18 +232,18 @@ function wsrrDownload(options){
 					outputDirectory,
 					wsrrUtils.getConnectionProperties(),
 					wsrrUtils,
-					require("./lib/apimcli"));															
-			}else{	
+					require("./lib/apimcli"));
+			}else{
 				flow.transferToFileSystemForServiceVersion(
 						bsrURI,
 						outputDirectory,
 						wsrrUtils.getConnectionProperties(),
 						wsrrUtils,
-						require("./lib/apimcli"));										
+						require("./lib/apimcli"));
 			}
-		}									
+		}
 	).catch(
-		function(e){		
+		function(e){
 			if(e){
 				logger.error(logger.Globalize.formatMessage("unexpectedprecheckfailure",options.transferMode[0]))
 				logger.error(e);
@@ -252,20 +252,20 @@ function wsrrDownload(options){
 				logger.error(logger.Globalize.formatMessage("transferModePrecheckFail",options.transferMode[0]));
 				process.exit(1);
 			});
-			
+
 		});
 }
 
 function apicUpload(options){
 	var uploaddirectory;
-	Promise.join(						
+	Promise.join(
 		new Promise(
 			function(resolve,reject) {
 				if (options.inputDirectory && options.inputDirectory!=="") {
-					uploaddirectory = options.inputDirectory;								
+					uploaddirectory = options.inputDirectory;
 					fs.access(uploaddirectory, fs.F_OK,
 						function(err) {
-							if (err) {													
+							if (err) {
 								logger.error(logger.Globalize.formatMessage("inputDirectoryDoesNotExist",uploaddirectory));
 								reject();
 							}else{
@@ -281,30 +281,30 @@ function apicUpload(options){
 										}else{
 											logger.error(logger.Globalize.formatMessage("errorRetrievingDirectoryContents",uploaddirectory),err);
 											reject();
-										}																		
-								});																				
+										}
+								});
 							}
 						});
 				}else{
 					logger.error(logger.Globalize.formatMessage("noInputDirectoryDefined",options.transferMode[0]));
 					reject();
 				}
-			}),											
+			}),
 		apictest = new Promise(
 			function(resolve,reject) {
 				apicUtils.testAPICConnection(
 					function(passed,error) {
-						if(passed){													
-							resolve();										
+						if(passed){
+							resolve();
 						}else{
 							logger.error(error);
 							logger.error(logger.Globalize.formatMessage("apicconnectiontestfailed"));
 							reject();
-						}													
+						}
 					})
 				}),
 		apicdevportaltest = new Promise(
-			function(resolve,reject){										
+			function(resolve,reject){
 				apicUtils.createConsumers(function(create){
 					if(create){
 						apicUtils.testPortalConnection(function(passed){
@@ -316,14 +316,14 @@ function apicUpload(options){
 						})
 					}else{
 						resolve();
-					}											
+					}
 				})
 			})
 	).then(
 		function() {
 			flow.pushToDraftFromFileSystem(
 					uploaddirectory,
-					wsrrUtils.getConnectionProperties(),															
+					wsrrUtils.getConnectionProperties(),
 					require("./lib/apimcli"),
 					require("./lib/apimdevportal"));
 		}).catch(function(e){
@@ -335,21 +335,21 @@ function apicUpload(options){
 				logger.error(logger.Globalize.formatMessage("transferModePrecheckFail",options.transferMode[0]));
 				process.exit(1);
 			});
-			
-		})	
+
+		})
 }
 
 function generateSwaggerFromLocalWSDL(options){
 	var inputDirectory;
-	var outputDirectory;							
-	Promise.join(						
+	var outputDirectory;
+	Promise.join(
 		new Promise(
 			function(resolve,reject) {
 				if (options.inputDirectory && options.inputDirectory!=="") {
-					inputDirectory = options.inputDirectory;								
+					inputDirectory = options.inputDirectory;
 					fs.access(inputDirectory, fs.F_OK,
 						function(err) {
-							if (err) {													
+							if (err) {
 								logger.error(logger.Globalize.formatMessage("inputDirectoryDoesNotExist",inputDirectory));
 								reject();
 							}else{
@@ -365,8 +365,8 @@ function generateSwaggerFromLocalWSDL(options){
 										}else{
 											logger.error(logger.Globalize.formatMessage("errorRetrievingDirectoryContents",inputDirectory),err);
 											reject();
-										}																		
-								});																				
+										}
+								});
 							}
 							});
 				}else{
@@ -380,13 +380,13 @@ function generateSwaggerFromLocalWSDL(options){
 					logger.error(logger.Globalize.formatMessage("noOutputDirectoryDefined",options.transferMode[0]));
 					reject();
 				}else{
-					outputDirectory=options.outputDirectory;											
+					outputDirectory=options.outputDirectory;
 					fs.access(outputDirectory,fs.F_OK,
 						function(err) {
 							if (err) {
 								mkdirp(outputDirectory,function(){
 									resolve();
-								})							
+								})
 							}else{
 								resolve();
 							}
@@ -397,12 +397,12 @@ function generateSwaggerFromLocalWSDL(options){
 			function(resolve,reject){
 				apicUtils.testAPICToolkit(function(passed,error) {
 					if(passed){
-						resolve();														
+						resolve();
 					}else{
 						logger.error(error);
 						logger.error(logger.Globalize.formatMessage("apicconnectiontestfailed"));
 						reject();
-					}													
+					}
 				});
 			})
 	).then(function(){
@@ -413,7 +413,7 @@ function generateSwaggerFromLocalWSDL(options){
 		if(e){
 			logger.error(logger.Globalize.formatMessage("unexpectedprecheckfailure",options.transferMode[0]))
 			logger.error(e);
-		}										
+		}
 			logger.error(logger.Globalize.formatMessage("transferModePrecheckFail",options.transferMode[0]));
 			process.exit(1);
 	});
@@ -422,16 +422,16 @@ function generateSwaggerFromLocalWSDL(options){
 function executePlugins(options){
 	var inputDirectory;
 	var outputDirectory;
-	var input;				
+	var input;
 	var pluginName;
-	Promise.join(						
+	Promise.join(
 		new Promise(
 			function(resolve,reject) {
 				if (options.inputDirectory && options.inputDirectory!=="") {
-					inputDirectory = options.inputDirectory;								
+					inputDirectory = options.inputDirectory;
 					fs.access(inputDirectory, fs.F_OK,
 						function(err) {
-							if (err) {													
+							if (err) {
 								logger.error(logger.Globalize.formatMessage("inputDirectoryDoesNotExist",inputDirectory));
 								reject();
 							}else{
@@ -447,8 +447,8 @@ function executePlugins(options){
 										}else{
 											logger.error(logger.Globalize.formatMessage("errorRetrievingDirectoryContents",inputDirectory),err);
 											reject();
-										}																		
-								});																				
+										}
+								});
 							}
 						});
 				}else{
@@ -461,19 +461,19 @@ function executePlugins(options){
 					logger.error(logger.Globalize.formatMessage("noOutputDirectoryDefined",options.transferMode[0]));
 					reject();
 				}else{
-					outputDirectory=options.outputDirectory;											
+					outputDirectory=options.outputDirectory;
 					fs.access(outputDirectory,fs.F_OK,
 						function(err) {
 							if (err) {
 								mkdirp(outputDirectory,function(){
 									resolve();
-								})							
+								})
 							}else{
 								resolve();
 							}
 						});
 				}
-			}),									
+			}),
 			new Promise(
 				function(resolve,reject){
 					if(options.transferMode.length < 2){
@@ -482,25 +482,25 @@ function executePlugins(options){
 					}else{
 						pluginName=options.transferMode[1];
 						if(options.transferMode.length>2){
-							input=options.transferMode[2];							
+							input=options.transferMode[2];
 						}
-						resolve();						
+						resolve();
 					}
-				})							
-		).then(function(){								
+				})
+		).then(function(){
 			flow.transferToFileSystemForPlugin(outputDirectory,inputDirectory,input,wsrrUtils.getConnectionProperties(),pluginName);
 		}).catch(function(e){
 			if(e){
 				logger.error(logger.Globalize.formatMessage("unexpectedprecheckfailure",options.transferMode[0]),e);
 				logger.error(e);
-			}										
+			}
 			logger.error(logger.Globalize.formatMessage("transferModePrecheckFail",options.transferMode[0]));
 			process.exit(1);
-		});	
+		});
 }
 
 function diagnosticMode(options){
-	if(options.diagnosticMode[0]==="1"){				
+	if(options.diagnosticMode[0]==="1"){
 		var propertiesFile,bsBsrURI,bsrURI;
 		if(options.diagnosticMode.length!==4){
 			//error as not enough arguments ([0]===mode,[1]===bsBsrURI,[2]===bsrURI,[3]===filePath)
@@ -514,28 +514,28 @@ function diagnosticMode(options){
 							propertiesFile="./connectionproperties.properties";
 						}
 						resolve();
-					}),							
-					new Promise(function(resolve,reject){								
+					}),
+					new Promise(function(resolve,reject){
 						wsrrUtils.validateBsrURI(options.diagnosticMode[1],function(passed){
-							if(passed){		
+							if(passed){
 								bsBsrURI=options.diagnosticMode[1];
 								resolve();
 							}else{
-								logger.error(logger.Globalize.formatMessage("invalidbsrURIprovided",options.diagnosticMode[1]));									
+								logger.error(logger.Globalize.formatMessage("invalidbsrURIprovided",options.diagnosticMode[1]));
 								reject();
 							}
-						});								
+						});
 					}),
-					new Promise(function(resolve,reject){								
+					new Promise(function(resolve,reject){
 						wsrrUtils.validateBsrURI(options.diagnosticMode[2],function(passed){
-							if(passed){		
+							if(passed){
 								bsrURI=options.diagnosticMode[2];
 								resolve();
 							}else{
-								logger.error(logger.Globalize.formatMessage("invalidbsrURIprovided",options.diagnosticMode[2]));									
+								logger.error(logger.Globalize.formatMessage("invalidbsrURIprovided",options.diagnosticMode[2]));
 								reject();
 							}
-						});								
+						});
 					})
 			).then(function(){
 				flow.diagnose_generateAPIAndProductYAML(
@@ -549,7 +549,7 @@ function diagnosticMode(options){
 		//trace.expandTraceBuffers()
 		//most work should be performed through logging class
 		logger.traceBuffers(options.diagnosticMode,function(){
-			
+
 		});
 	}else if(options.diagnosticMode[0]==="3"){
 		flow.diagnose_listPlugins();
@@ -558,7 +558,7 @@ function diagnosticMode(options){
 	}
 }
 
-function initialize() {	
+function initialize() {
 	logger.initialize(function() {
 		logger.loggerStart();
 		var cli = getCLIArgs();
@@ -571,7 +571,7 @@ function initialize() {
 		var options;
 		try{
 			options = cli.parse();
-		}catch(err){			
+		}catch(err){
 			logger.error(logger.Globalize.formatMessage("cliargumentprocessingfailure",err.message));
 			if(err.name==="UNKNOWN_OPTION"){
 				console.log(usage);
@@ -603,12 +603,12 @@ function initialize() {
 			});
 		}else if(options.diagnosticMode){
 			diagnosticMode(options)
-		} else {			
+		} else {
 			if (options.connectionPropertiesFile) {
-				logger.debug("Setting Connections Properties file to: "+options.connectionPropertiesFile);						
+				logger.debug("Setting Connections Properties file to: "+options.connectionPropertiesFile);
 				wsrrUtils.setConnectionPropertiesFile(options.connectionPropertiesFile);
 				apicUtils.setConnectionPropertiesFile(options.connectionPropertiesFile);
-			}				
+			}
 			if (options.testWSRRConnection) {
 				wsrrUtils.testWSRRConnection(function(passed, data) {
 					if (passed) {
@@ -633,24 +633,24 @@ function initialize() {
 			}
 			//Test Modes cannot be run in conjunction with transfer modes
 			if (!options.testWSRRConnection	&& !options.testAPICConnection) {
-				if (options.transferMode[0] === '1' || options.transferMode[0] === '2' || options.transferMode[0] === '3' || options.transferMode[0] === '4'  || options.transferMode[0] === '5') {						
+				if (options.transferMode[0] === '1' || options.transferMode[0] === '2' || options.transferMode[0] === '3' || options.transferMode[0] === '4'  || options.transferMode[0] === '5') {
 						wsrrUtils.setWSRRConnectiondetails(propertyParse.parse(fs
-							.readFileSync(wsrrUtils.getConnectionPropertiesFile())));												
-					if (options.transferMode[0] === '1') {							
+							.readFileSync(wsrrUtils.getConnectionPropertiesFile())));
+					if (options.transferMode[0] === '1') {
 						endToEndTransfer(options);
-					} else if (options.transferMode[0] === '2') {																
-						wsrrDownload(options);							
-					} else if (options.transferMode[0] === '3') {							
-						apicUpload(options);							
-					} else if (options.transferMode[0] === '4') {							
-						generateSwaggerFromLocalWSDL(options);									
+					} else if (options.transferMode[0] === '2') {
+						wsrrDownload(options);
+					} else if (options.transferMode[0] === '3') {
+						apicUpload(options);
+					} else if (options.transferMode[0] === '4') {
+						generateSwaggerFromLocalWSDL(options);
 					} else if (options.transferMode[0] === '5'){
 						executePlugins(options);
-					} 
+					}
 				}else {
 						logger.error(logger.Globalize.formatMessage("invalid.transfer.mode.value",options.transferMode));
 				}
-			}			
+			}
 		}
 	});
 }
@@ -684,7 +684,7 @@ function getCLIArgs() {
 				alias : "a",
 				description : logger.Globalize
 						.formatMessage("apicTestConnection")
-			},			
+			},
 			{
 				name : "outputDirectory",
 				type : String,
