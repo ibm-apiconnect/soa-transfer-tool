@@ -1,6 +1,6 @@
 {
   "name": "apiconnect-soa-transfer-tool",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "IBM Service Oriented Architecture Transfer Tool",
   "scripts": {
     "test": "./node_modules/.bin/mocha --reporter spec --grep unittests",
