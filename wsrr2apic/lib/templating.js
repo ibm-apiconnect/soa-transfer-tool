@@ -13,7 +13,7 @@
 
 'use strict';
 
-var _ = require('lodash'), logger = require("./Logger"), Handlebars = require('handlebars'), yaml = require('js-yaml'), 
+var _ = require('lodash'), logger = require("./Logger"), Handlebars = require('handlebars'), yaml = require('js-yaml'),
 fs = require('fs'), Promise = require('bluebird'), url = require('url'), path = require('path');
 
 //promise FS
@@ -90,18 +90,18 @@ Handlebars.registerHelper("apiName", function(data){
 	          // remove all end hyphens
 	          name = name.replace(/[-]+$/, '');
 	          // remove all start numbers
-	          name = name.replace(/^[0-9]+/, '');      
+	          name = name.replace(/^[0-9]+/, '');
 	          // only lower case
 	          name = name.toLowerCase();
-          }while(!(/^[a-z]/.test(name)));        	          
+          }while(!(/^[a-z]/.test(name)));
       } else {
     	  name="";
       }
       return name;
 });
 Handlebars.registerHelper("debug", function(data){
-	  // lets you do: {{debug endpoints}} 
-	  // and get this and also whatever endpoints is out to the console. 
+	  // lets you do: {{debug endpoints}}
+	  // and get this and also whatever endpoints is out to the console.
 	 console.log("Current:");
 	 console.log(this);
 	 if(data){
@@ -127,10 +127,10 @@ Handlebars.registerHelper("multiline", function(data){
  */
 function _handlerOnlyClassified(context, classification, options) {
 	var ret = "";
-	// check we have a classification and the object has classifications 
+	// check we have a classification and the object has classifications
 	if(classification && context.classifications && context.classifications.indexOf(classification) !== -1) {
 		// call inner block
-		ret = options.fn(context);	
+		ret = options.fn(context);
 	}
 	return ret;
 }
@@ -152,18 +152,18 @@ function _handlerEndpointByClassifications(data) {
 	logger.debug("_handlerEndpointByClassifications classifications to find: " + classifications);
 	// now go find the endpoint with the classifications
 	var retEp = null;
-	
+
 	// check for single SLD
 	var slds = data;
 	if(typeof data.length === "undefined") {
 		// treat as single SLD
 		slds = [data];
 	}
-	
+
 	if(slds.length) {
 		for(var i = 0, len = slds.length; i < len; i++) {
 			var sld = slds[i];
-			logger.debug("_handlerEndpointByClassifications sld: " + sld.bsrURI);			
+			logger.debug("_handlerEndpointByClassifications sld: " + sld.bsrURI);
 			// check each endpoint
 			for(var epI = 0, epLen = sld.endpoints.length; epI < epLen; epI++) {
 				var ep = sld.endpoints[epI];
@@ -175,7 +175,7 @@ function _handlerEndpointByClassifications(data) {
 						// fail the match
 						matched = false;
 						break;
-					}						
+					}
 				}
 				// if matched is true then we found the endpoint
 				if(matched) {
@@ -220,7 +220,7 @@ function _handlerClassificationToValue(data, options) {
 			uriToValue[uri] = value;
 		}
 	}
-	
+
 	// find if any keys in the hash are on the object
 	if(data && data.classifications && data.classifications.length) {
 		for(var i = 0, j = data.classifications.length; i < j; i++) {
@@ -239,7 +239,7 @@ Handlebars.registerHelper("classificationToValue", _handlerClassificationToValue
 /* helper to take parameters in pairs, first is the to URI and second is the value, and look at the classifications on the object passed in
  * and when it finds the matches and adds to a list., output the array of value.
  * If the parameters don't come in pairs then ignore the unmatched one.
- * 
+ *
  * Produces a result like
  * classifications:
  *     - Production
@@ -268,7 +268,7 @@ function _handlerClassificationsToValueArray(data,options){
 				}else{
 					ret=ret+","+uriToValue[data.classifications[i]];
 				}
-				
+
 			}
 		}
 	}
@@ -280,7 +280,7 @@ Handlebars.registerHelper("classificationsToValueArray", _handlerClassifications
 /* helper to take parameters in pairs, first is the to URI and second is the value, and look at the classifications on the object passed in
  * and when it finds the matches and adds to a list. output the array of values prepended with the provided key.
  * If the parameters don't come in pairs then ignore the unmatched one.
- * 
+ *
  * produces a result like
  * classifications:
  *     - classification: Production
@@ -309,7 +309,7 @@ function _handlerClassificationsToValueArrayWithKey(data,options){
 					ret = key+": "+uriToValue[data.classifications[i]];
 				}else{
 					ret=ret+","+key+": "+uriToValue[data.classifications[i]];
-				}				
+				}
 			}
 		}
 	}
@@ -336,7 +336,7 @@ function _handlerStateToValue(data, options) {
 			uriToValue[uri] = value;
 		}
 	}
-	
+
 	// find if any keys in the hash are on the object
 	if(data && data.state) {
 		if(uriToValue[data.state]) {
@@ -350,7 +350,7 @@ Handlebars.registerHelper("stateToValue", _handlerStateToValue);
 
 
 /*
- * 
+ *
  * examples
  * {{#each relationships}}
  *   {{@key}}: {{RelationshipToMap this}}
@@ -359,7 +359,7 @@ Handlebars.registerHelper("stateToValue", _handlerStateToValue);
  *
  */
 function _handlerRelationshipToMap(data,options){
-	logger.entry("_handlerRelationshipToMap", arguments);	
+	logger.entry("_handlerRelationshipToMap", arguments);
 	var ret="";
 	var key="";
 	//If we have data on options and the key
@@ -379,7 +379,7 @@ function _handlerRelationshipToMap(data,options){
 		}else{
 			ret=ret+", "+key+i+": [bsrURI: "+bsrURI+", pimaryType: "+primaryType+"]";
 		}
-	}	
+	}
 	ret="["+ret+"]";
 	logger.exit("_handlerRelationshipToMap", ret);
 	return ret
@@ -388,12 +388,12 @@ Handlebars.registerHelper("RelationshipToMap",_handlerRelationshipToMap);
 
 /*
  * Only the first match is converted and returned
- * example ale63_owningOrganization: {{RelationshipToValue this.relationships.ale63_owningOrganization "9772d397-a8fd-4d2f.adb4.44f34044b410" "Common Services" "386a9f38-fb86-46b5.867f.6ee9186e7f65" "Mobile Apps"}} 
+ * example ale63_owningOrganization: {{RelationshipToValue this.relationships.ale63_owningOrganization "9772d397-a8fd-4d2f.adb4.44f34044b410" "Common Services" "386a9f38-fb86-46b5.867f.6ee9186e7f65" "Mobile Apps"}}
  */
 function _handlerRelationshipToValue(data,options){
-	logger.entry("_handlerRelationshipToValue", arguments);	
+	logger.entry("_handlerRelationshipToValue", arguments);
 	var ret="";
-	var uriToValue = {};		
+	var uriToValue = {};
 	if(arguments.length > 2) {
 		// only iterate so the pair of values is the ones before the last parameter
 		for(var argI = 1, argLen = arguments.length; argI < argLen - 2; argI+=2) {
@@ -405,7 +405,7 @@ function _handlerRelationshipToValue(data,options){
 	// find if any keys in the hash are on the object
 	if(data) {
 		var relationships=data
-		for(var i = 0, j = relationships.length; i < j; i++) {			
+		for(var i = 0, j = relationships.length; i < j; i++) {
 			if(uriToValue[relationships[i].bsrURI]) {
 				// match
 				ret = uriToValue[relationships[i].bsrURI];
@@ -413,7 +413,7 @@ function _handlerRelationshipToValue(data,options){
 			}
 		}
 	}
-	
+
 	logger.exit("_handlerRelationshipToValue", ret);
 	return ret;
 }
@@ -425,22 +425,28 @@ Handlebars.registerHelper("RelationshipToValue",_handlerRelationshipToValue);
 /*
  * Merge the objects by taking properties from overrideObject and overwriting the corresponding
  * properties on baseObject.
- * 
+ *
  * Arrays and objects are merged recursively.
  *
- * Used to take a object representing the yaml and update it with an object representing the 
+ * Used to take a object representing the yaml and update it with an object representing the
  * yaml which was created by a template and some data.
- * 
+ *
  */
 function _mergeObjects(baseObject, overrideObject) {
 	logger.entry("_mergeObjects", baseObject, overrideObject);
-	
+
 	// use lodash.merge to do this
 	// If both the populated template and the wsdl generated yaml contain an assembly populate using the templated assembly
 	if(baseObject['x-ibm-configuration'] && overrideObject['x-ibm-configuration']){
 		if(baseObject['x-ibm-configuration']['assembly'] && overrideObject['x-ibm-configuration']['assembly']){
 			baseObject['x-ibm-configuration']=_.omit(baseObject['x-ibm-configuration'],'assembly');
 		}
+	}
+	if(baseObject['securityDefinitions'] && overrideObject['securityDefinitions']){
+		baseObject=_.omit(baseObject,'security');
+	}
+	if(baseObject['security'] && overrideObject['security']){
+		baseObject=_.omit(baseObject,'security');
 	}
 	var merged = _.merge(baseObject, overrideObject);
 
@@ -451,26 +457,26 @@ function _mergeObjects(baseObject, overrideObject) {
 /*
  * Combine the objects representing API Yaml, taking the contents of
  * overrideYamlObject as precident.
- * 
+ *
  * Returns single object.
- * 
+ *
  */
 function combineApiYamlObjects(baseYamlObject, overrideYamlObject) {
 	logger.entry("combineApiYamlObjects", baseYamlObject, overrideYamlObject);
-	
+
 	// use _mergeObjects without anything extra for now
 	var merged = _mergeObjects(baseYamlObject, overrideYamlObject);
-	
+
 	logger.exit("combineApiYamlObjects", merged);
 	return merged;
 }
 
 /*
  * Generate string from template.
- * 
+ *
  * templateContent is a utf-8 string which is the template which should generate a YAML representation of an object.
  * dataObject is a JS object containing the data referred to in the template.
- * 
+ *
  * returns string which is the formatted template.
  * throws an Error if the template step fails.
  */
@@ -479,7 +485,7 @@ function generateStringFromYamlTemplate(/* utf-8 string */templateContent, dataO
 
 	var returnObject = null;
 	var result = null;
-	
+
 	logger.debug("compiling template");
 	try {
 		var template = Handlebars.compile(templateContent);
@@ -487,7 +493,7 @@ function generateStringFromYamlTemplate(/* utf-8 string */templateContent, dataO
 	} catch(e) {
 		logger.error(e);
 		throw e;
-	}	
+	}
 
 	logger.exit("generateStringFromYamlTemplate", result);
 	return result;
@@ -495,9 +501,9 @@ function generateStringFromYamlTemplate(/* utf-8 string */templateContent, dataO
 
 /*
  * Generate object from yaml string.
- * 
+ *
  * yamlString is a utf-8 string which is YAML representation of an object.
- * 
+ *
  * returns object which is the formatted template parsed as a YAML object.
  * throws an Error if the parsing of an object from the template fails.
  */
@@ -513,17 +519,17 @@ function generateObjectFromYamlString(/* utf-8 string */yamlString) {
 		logger.error(e);
 		throw e;
 	}
-	
+
 	logger.exit("generateObjectFromYamlString", returnObject);
 	return returnObject;
 }
 
 /*
  * Generate object from template.
- * 
+ *
  * templateContent is a utf-8 string which is the template which should generate a YAML representation of an object.
  * dataObject is a JS object containing the data referred to in the template.
- * 
+ *
  * returns object which is the formatted template parsed as a YAML object.
  * throws an Error if the template step fails, or the parsing of an object from the template fails.
  */
@@ -531,9 +537,9 @@ function generateObjectFromYamlTemplate(/* utf-8 string */templateContent, dataO
 	logger.entry("generateObjectFromYamlTemplate", templateContent, dataObject);
 
 	var result = generateStringFromYamlTemplate(templateContent, dataObject);
-	
+
 	var returnObject = generateObjectFromYamlString(result);
-	
+
 	logger.exit("generateObjectFromYamlTemplate", returnObject);
 	return returnObject;
 }
@@ -545,19 +551,19 @@ function generateObjectFromYamlTemplate(/* utf-8 string */templateContent, dataO
  *
  * Type = SOAP, REST, REST_SWAGGER or PRODUCT
  * Configuration entry is template_SOAP, etc and gives the file name of the template.
- * Templates are assumed to be stored in the folder "templates" directly under the 
+ * Templates are assumed to be stored in the folder "templates" directly under the
  * running directory.
  * Defaults if the config entry is not there, is soap.yaml, rest.yaml, etc
- * 
+ *
  * TODO: probably add more like Product-per-version and Product-per-business-service
- * 
+ *
  * Return promise that resolves once the load is done.
  *
  */
 function loadTemplatesIntoMap(configuration) {
 	logger.entry("loadTemplatesIntoMap", configuration);
 	var promise = null;
-	
+
 	// for type, config is config property to use for file name and file is default file name
 	var configs = {};
 	configs[SOAP] = {config: "template_SOAP", file: "soap.yaml"};
@@ -568,7 +574,7 @@ function loadTemplatesIntoMap(configuration) {
 	configs[CONSUMERS_PER_VERSION] = {config: "template_CONSUMERS_PER_VERSION", file: "consumersPerVersion.yaml"};
 	// use product per version unless overridden
 	configs[PRODUCT_WSDL] = {config: "template_PRODUCT_WSDL", file: "productWsdl.yaml"};
-	
+
 	// override value of file if one in config
 	for(var type in configs) {
 		var typeConfig = configs[type];
@@ -605,7 +611,7 @@ function loadTemplatesIntoMap(configuration) {
 	}
 	// return promise all for the reads
 	promise = Promise.all(promises);
-	
+
 	logger.exit("loadTemplatesIntoMap", promise);
 	return promise;
 }
@@ -613,13 +619,13 @@ function loadTemplatesIntoMap(configuration) {
 /*
  * Get the utf8 string template for the specified type.
  * Type = SOAP, REST, REST_SWAGGER, PRODUCT or CONSUMERS
- * 
+ *
  * Returns a reference to the template string. This is not cloned so do not modify it.
  * Or throws an error if no template exists for the type.
  */
 function getTemplate(type) {
 	logger.entry("getTemplate", type);
-	
+
 	var content = null;
 	if(templateMap[type]) {
 		content = templateMap[type];
@@ -627,9 +633,9 @@ function getTemplate(type) {
 	if(!content) {
 		var e = new Error(logger.Globalize.formatMessage("templatingErrorNoTemplate", type));
 		logger.error(e);
-		throw e;		
+		throw e;
 	}
-	
+
 	logger.exit("getTemplate", content);
 	return content;
 }
@@ -650,7 +656,7 @@ module.exports = {
 	PRODUCT_PER_VERSION:PRODUCT_PER_VERSION,
 	CONSUMERS_PER_VERSION:CONSUMERS_PER_VERSION,
 	PRODUCT_WSDL:PRODUCT_WSDL,
-	
+
 	// modules for unit testing
 	_test_mergeObjects:_mergeObjects,
 	_test_handlerHostProtocol:_handlerHostProtocol,
@@ -662,5 +668,5 @@ module.exports = {
 	_test_handlerStateToValue:_handlerStateToValue,
 	_test_handlerRelationshipToMap:_handlerRelationshipToMap,
 	_test_handlerRelationshipToValue:_handlerRelationshipToValue
-	
+
 };
