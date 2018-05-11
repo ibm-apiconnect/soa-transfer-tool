@@ -238,7 +238,7 @@ function storeWSDL(businessServiceBsrURI, serviceVersionBsrURI, data) {
 	// make folders
 	var promise = _makeFolders(businessServiceBsrURI, serviceVersionBsrURI).then(function(){
 		logger.entry("storeWSDL_madeFolders");
-		var zip = new NodeZip();
+		var zip = new nodeZip();
 		for(var i = 0; i < data.length; i++) {
 			if(!data[i].location || !data[i].content || !data[i].name) {
 				throw new Error("Data incorrect needs location content name fields: " + data[i]);
