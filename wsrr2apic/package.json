@@ -1,6 +1,6 @@
 {
   "name": "apiconnect-soa-transfer-tool",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "IBM Service Oriented Architecture Transfer Tool",
   "scripts": {
     "test": "./node_modules/.bin/mocha --reporter spec --grep unittests",
@@ -77,7 +77,7 @@
     "yakbak": "2.5.0"
   },
   "repository": {
-	  "type": "git",
-	  "url": "https://github.com/ibm-apiconnect/soa-transfer-tool.git"
+    "type": "git",
+    "url": "https://github.com/ibm-apiconnect/soa-transfer-tool.git"
   }
 }
