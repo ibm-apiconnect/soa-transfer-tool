@@ -10,7 +10,7 @@
  * US Government Users Restricted Rights - Use, duplication or disclosure
  * restricted by GSA ADP Schedule Contract with IBM Corp.
  ********************************************************** {COPYRIGHT-END} **/
-var logger = require("./lib/Logger"), wsrrUtils = require("./lib/WSRR/wsrrUtils"), cliArgs = require("command-line-args"), apicUtils = require("./lib/APIC/apicUtils"), pjson = require('./package.json'), Promise = require("bluebird"), flow = require("./lib/flow"), lock = require("./lib/utils/lock"), os = require("os"), fs = require("fs"), mkdirp = require("mkdirp"),homedir=require("os-homedir"),propertyParse = require("properties-parser"),promiseStatus=require("./lib/utils/promiseStatus");
+var logger = require("./lib/Logger"), wsrrUtils = require("./lib/WSRR/wsrrUtils"), cliArgs = require("command-line-args"), apicUtils = require("./lib/APIC/apicUtils"), pjson = require('./package.json'), Promise = require("bluebird"), flow = require("./lib/flow"), lock = require("./lib/utils/lock"), os = require("os"), fs = require("fs"), mkdirp = require("mkdirp"),homedir=require("os-homedir"),propertyParse = require("properties-parser"),promiseStatus=require("./lib/utils/promiseStatus"),comparison=require("./lib/ttComparison");
 
 var outputDirectoryCreation,wsrrtest,apictest,wsrrOrg,bsrURICheck,apicdevportaltest;
 
@@ -137,7 +137,7 @@ function endToEndTransfer(options){
 		function(e){
 			//If a error or rejection occurs, check to ensure long running promises complete before exiting the program
 			if(e){
-								logger.error(logger.Globalize.formatMessage("unexpectedprecheckfailure",options.transferMode[0]));
+				logger.error(logger.Globalize.formatMessage("unexpectedprecheckfailure",options.transferMode[0]));
 				logger.error(e);
 			}
 			promiseStatus.checkPromisesStatus([wsrrtest,apictest,apicdevportaltest],function(){
@@ -558,6 +558,78 @@ function diagnosticMode(options){
 	}
 }
 
+function comparisonMode(options){
+	if(options.comparisonMode.length === 2 || options.comparisonMode.length === 3){
+		var filePath1 = options.comparisonMode[0];
+		var filePath2 = options.comparisonMode[1];
+		var resultOutputDirectory;
+		var resultFile;
+		if(options.comparisonMode.length === 3){
+			resultFile=options.comparisonMode[2];
+		}
+		//Ensure files exist and can be opened
+		Promise.join(
+			new Promise(function(resolve,reject){
+				fs.readFile(filePath1,function(err,data){
+					if(err){
+						logger.error(logger.Globalize.formatMessage("unableToOpenFile",filePath1),err)
+						reject();
+					}else{
+						resolve();
+					}
+				});
+			}),
+			new Promise(function(resolve,reject){
+				fs.readFile(filePath2,function(err,data){
+					if(err){
+						logger.error(logger.Globalize.formatMessage("unableToOpenFile",filePath2),err)
+						reject();
+					}else{
+						resolve();
+					}
+				});
+			}),
+			new Promise(
+				function(resolve,reject) {
+					if(!options.outputDirectory){
+						resultOutputDirectory=homedir()+"/.soatt/comparison_results";
+					}else{
+						resultOutputDirectory=options.outputDirectory;
+					}
+					fs.access(resultOutputDirectory,fs.F_OK,
+						function(err) {
+							if (err) {
+								mkdirp(resultOutputDirectory,function(){
+									resolve();
+								})
+							}else{
+								resolve();
+							}
+						});
+				})
+			/*
+			new Promise(function(resolve,reject){
+				//check that paths aren't the same
+				if(filePath1!==filePath2){
+					resolve();
+				}else{
+					reject();
+				}
+			})*/
+		).then(function(){
+			comparison.fileCompare(filePath1,filePath2,resultOutputDirectory,resultFile);
+		}).catch(function(e){
+			if(e){
+				//logger.error(logger.Globalize.formatMessage("unexpectedprecheckfailure",options.transferMode[0]),e);
+				logger.error(e);
+			}
+			process.exit(1);
+		});
+	}else{
+		logger.error(logger.Globalize.formatMessage("incorrectNumberOfFiles"));
+	}
+}
+
 function initialize() {
 	logger.initialize(function() {
 		logger.loggerStart();
@@ -590,7 +662,7 @@ function initialize() {
 			});
 		//No need to put this is the logger, but needs the logger initialized to pull the message
 		console.log(logger.Globalize.formatMessage("startup",pjson.version));
-		if (options.help || (!options.testWSRRConnection && !options.testAPICConnection && !options.transferMode && !options.version && !options.reviewlogs && !options.diagnosticMode)) {
+		if (options.help || (!options.testWSRRConnection && !options.testAPICConnection && !options.transferMode && !options.version && !options.reviewlogs && !options.diagnosticMode && !options.comparisonMode)) {
 			console.log(usage);
 			lock.exit(0);
 		} else if (options.version) {
@@ -603,6 +675,8 @@ function initialize() {
 			});
 		}else if(options.diagnosticMode){
 			diagnosticMode(options)
+		}else if(options.comparisonMode){
+			comparisonMode(options);
 		} else {
 			if (options.connectionPropertiesFile) {
 				logger.debug("Setting Connections Properties file to: "+options.connectionPropertiesFile);
@@ -670,8 +744,13 @@ function getCLIArgs() {
 				type : String,
 				multiple : true,
 				description : logger.Globalize.formatMessage("transferMode")
-			},
-			{
+			},{
+				name : "comparisonMode",
+				alias : "c",
+				type : String,
+				multiple : true,
+				description : logger.Globalize.formatMessage("comparisonMode")
+			},{
 				name : "testWSRRConnection",
 				type : Boolean,
 				alias : "w",
