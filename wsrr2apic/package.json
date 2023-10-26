@@ -51,7 +51,7 @@
     "command-line-args": "2.1.6",
     "encoding": "0.1.12",
     "globalize": "1.0.0",
-    "handlebars": "4.5.3",
+    "handlebars": "4.7.7",
     "js-yaml": "3.13.1",
     "lodash": "4.17.15",
     "logrotate-stream": "0.2.5",
